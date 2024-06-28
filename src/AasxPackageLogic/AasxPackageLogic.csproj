@@ -1,0 +1,69 @@
+﻿  <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Used to access the XML summary for Options.cs -->
+    <!-- <GenerateDocumentationFile>true</GenerateDocumentationFile> -->
+  </PropertyGroup>
+  <PropertyGroup>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
+	<ItemGroup>
+		<Using Include="AasCore.Aas3_0" />
+	</ItemGroup>
+  <ItemGroup>
+    <None Remove="LICENSE.txt" />
+    <None Remove="Resources\BuildDate.txt" />
+    <None Remove="Resources\i4AASCS.xml" />
+    <Reference Include="System.Security" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\BuildDate.txt" />
+    <EmbeddedResource Include="Resources\i4AASCS.xml" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="dotNetRdf" Version="3.1.1" />
+    <PackageReference Include="IdentityModel" Version="6.0.0" />
+    <PackageReference Include="jose-jwt" Version="4.0.1" />
+    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SSharp.Net" Version="1.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AasxAmlImExport\AasxAmlImExport.csproj" />
+    <ProjectReference Include="..\AasxBammRdfImExport\AasxBammRdfImExport.csproj" />
+    <ProjectReference Include="..\AasxCore.Samm2_2_0\AasxCore.Samm2_2_0.csproj" />
+    <ProjectReference Include="..\AasxFileServerRestLibrary\AasxFileServerRestLibrary.csproj" />
+    <ProjectReference Include="..\AasxIntegrationBaseWpf\AasxIntegrationBaseWpf.csproj" />
+    <ProjectReference Include="..\AasxIntegrationBase\AasxIntegrationBase.csproj" />
+    <ProjectReference Include="..\AasxOpenidClient\AasxOpenidClient.csproj" />
+    <ProjectReference Include="..\AasxPredefinedConcepts\AasxPredefinedConcepts.csproj" />
+    <ProjectReference Include="..\AasxSchemaExport\AasxSchemaExport.csproj" />
+    <ProjectReference Include="..\AasxSignature\AasxSignature.csproj" />
+    <ProjectReference Include="..\AnyUi\AnyUi.csproj" />
+    <ProjectReference Include="..\jsoncanonicalizer\jsoncanonicalizer.csproj" />
+    <ProjectReference Include="..\SSIExtension\SSIExtension.csproj" />
+    
+    <!--
+    <ProjectReference Include="..\AasxRestServerLibrary\AasxRestServerLibrary.csproj" />
+    <ProjectReference Include="..\AasxFileServerRestLibrary\AasxFileServerRestLibrary.csproj" />
+    <ProjectReference Include="..\AasxBammRdfImExport\AasxBammRdfImExport.csproj" />
+    <ProjectReference Include="..\AasxUANodesetImExport\AasxUANodesetImExport.csproj" />
+    -->
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="echo %25date%25 &gt; &quot;$(ProjectDir)\Resources\BuildDate.txt&quot;" />
+  </Target>
+</Project>

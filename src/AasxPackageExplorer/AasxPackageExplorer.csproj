@@ -1,0 +1,172 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <UseWPF>true</UseWPF>
+
+    <!--
+	    Both Platform and Platforms need to be specified:
+	        * Dotnet CLI will only recognize "Platform",
+			* Visual Studio will only recognize "Platforms".
+	-->
+	<Platforms>x64</Platforms>
+	<Platform>x64</Platform>
+  <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon-set-IDTA-blue\Icon_AASX.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AasxPackageLogic\AasxPackageLogic.csproj" />
+    <ProjectReference Include="..\AasxIntegrationBaseWpf\AasxIntegrationBaseWpf.csproj" />
+    <ProjectReference Include="..\AasxIntegrationBase\AasxIntegrationBase.csproj" />
+    <ProjectReference Include="..\AasxPredefinedConcepts\AasxPredefinedConcepts.csproj" />
+    <ProjectReference Include="..\AasxDictionaryImport\AasxDictionaryImport.csproj" />
+    <ProjectReference Include="..\AasxWpfControlLibrary\AasxWpfControlLibrary.csproj" />
+	  <ProjectReference Include="..\AnyUi\AnyUi.csproj" />
+    <ProjectReference Include="..\AasxMqttClient\AasxMqttClient.csproj" />
+    <ProjectReference Include="..\AasxMqtt\AasxMqtt.csproj" />
+  </ItemGroup>
+
+  <!--
+  
+    <ProjectReference Include="..\AasxToolkit\AasxToolkit.csproj" />
+    <ItemGroup>
+    <ProjectReference Include="..\AasxAmlImExport\AasxAmlImExport.csproj" />
+	<ProjectReference Include="..\AasxBammRdfImExport\AasxBammRdfImExport.csproj" />
+    <ProjectReference Include="..\AasxCsharpLibrary\AasxCsharpLibrary.csproj" />
+    <ProjectReference Include="..\AasxPackageLogic\AasxPackageLogic.csproj" />
+    <ProjectReference Include="..\AasxToolkit\AasxToolkit.csproj" />
+    <ProjectReference Include="..\AasxIntegrationBaseWpf\AasxIntegrationBaseWpf.csproj" />
+    <ProjectReference Include="..\AasxIntegrationBase\AasxIntegrationBase.csproj" />
+    <ProjectReference Include="..\AasxOpenidClient\AasxOpenidClient.csproj" />
+    <ProjectReference Include="..\AasxPredefinedConcepts\AasxPredefinedConcepts.csproj" />
+    <ProjectReference Include="..\AasxRestServerLibrary\AasxRestServerLibrary.csproj" />
+    <ProjectReference Include="..\AasxSignature\AasxSignature.csproj" />
+    <ProjectReference Include="..\AasxUANodesetImExport\AasxUANodesetImExport.csproj" />
+    <ProjectReference Include="..\AasxWpfControlLibrary\AasxWpfControlLibrary.csproj" />
+	  <ProjectReference Include="..\AnyUi\AnyUi.csproj" />
+    <ProjectReference Include="..\jsoncanonicalizer\jsoncanonicalizer.csproj" />
+    <ProjectReference Include="..\es6numberserializer\es6numberserializer.csproj" />
+  </ItemGroup>
+  
+    The default options for Debug differ from Release such that the plugin directory is
+    ".", while Release's plugin directory is ".\\plugins"
+  -->
+  <Choose>
+    <When Condition="'$(Configuration)' == 'Debug'">
+      <ItemGroup>
+        <None Update="AasxPackageExplorer.options-for-debug.json">
+          <Link>AasxPackageExplorer.options.json</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+      </ItemGroup>
+    </When>
+    <When Condition="'$(Configuration)' == 'Release'">
+      <ItemGroup>
+        <None Update="AasxPackageExplorer.options-for-release.json">
+          <Link>AasxPackageExplorer.options.json</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+      </ItemGroup>
+    </When>
+  </Choose>
+
+  <ItemGroup>
+    <Folder Include="FlyoutsForPlugins\" />
+    <None Update="data-spec-presets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local-identifier-presets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="IDTA_and_PI40_t.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="options-debug.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="options-debug.MIHO.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="options.pref">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="backup\README.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="plugins\README.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="extension-presets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="qualifier-presets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Resource Include="icon-set-blue-zipper\aasx-icon-blue-zipper.ico" />
+    <Resource Include="Resources\IDTA_AAS-Logo_312x281_RGB.png" />
+    <Resource Include="Resources\USB_Hexagon_offen.jpeg" />
+    <Resource Include="Resources\Festo_t.png" />
+    <Resource Include="Resources\round_down.png" />
+    <Resource Include="Resources\round_right.png" />
+    <None Update="SpecPI40_t.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Resource Include="icon-set\aasx.ico" />
+    <Resource Include="icon-set\Icon_AASX_256x256_W.bmp" />
+    <Resource Include="aasx.ico" />
+    <Folder Include="eclass\" />
+    <Resource Include="LICENSE.TXT">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <None Include="content-for-demo\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Remove="i4AASCS.xml" />
+    <None Remove="icon-set-blue-zipper\aasx-icon-blue-zipper.ico" />
+    <None Remove="Resources\IDTA_AAS-Logo_312x281_RGB.png" />
+    <Content Include="icon-set-IDTA-blue\Icon_AASX.ico" />
+    <None Update="Opc.Ua.SampleClient.Config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="debug.MIHO.script">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
+    <PackageReference Include="ExhaustiveMatching.Analyzer" Version="0.5.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+    <PackageReference Include="jose-jwt" Version="4.0.1" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="12.2.2" />
+    <PackageReference Include="Magick.NET.Core" Version="12.2.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="SSharp.Net" Version="1.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <PropertyGroup />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties options-debug_1miho_1json__JsonSchema="https://appliedengdesign.github.io/cnccodes-json-schema/draft/2022-07/schema" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

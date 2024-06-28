@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "dotnet-format": {
+      "version": "7.0.360101",
+      "commands": [
+        "dotnet-format"
+      ]
+    },
+    "deadcsharp": {
+      "version": "2.0.0",
+      "commands": [
+        "dead-csharp"
+      ]
+    },
+    "bitesized": {
+      "version": "2.0.0",
+      "commands": [
+        "bite-sized"
+      ]
+    },
+    "doctestcsharp": {
+      "version": "2.0.0",
+      "commands": [
+        "doctest-csharp"
+      ]
+    },
+    "opinionatedcsharptodos": {
+      "version": "2.0.0",
+      "commands": [
+        "opinionated-csharp-todos"
+      ]
+    },
+    "jetbrains.resharper.globaltools": {
+      "version": "2022.3.2",
+      "commands": [
+        "jb"
+      ]
+    }
+  }
+}
