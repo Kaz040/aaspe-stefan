@@ -27,6 +27,9 @@ using System.Net.Http;
 using AasxIntegrationBase.AdminShellEvents;
 using System.Drawing;
 using System.Security.Policy;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace AasxPluginAssetInterfaceDescription
 {
@@ -98,6 +101,7 @@ namespace AasxPluginAssetInterfaceDescription
 
         override public async Task<bool> ExecuteBindingAsync(AssetBindingService item)
         {
+            bool IsValid = false;
             if (item?.FormData?.Href?.HasContent() != true
                 || item.FormData.Htv_methodName?.HasContent() != true
                 || !IsConnected())
@@ -105,15 +109,53 @@ namespace AasxPluginAssetInterfaceDescription
 
             try
             {
-                var url = new Uri(TargetUri, item?.FormData.Href);
+                var urlPath = item?.FormData.Href;
+                var urlPathandParameter = urlPath.Split('?');
+                var paremeter = urlPathandParameter[1];
+                if(paremeter.Contains("challenge"))
+                {
+                    //Get the challenge value in xxxxxxxxxxxxxx
+                    var challenge = paremeter.Split('=')[1];
 
-                var response = await Client.GetAsync(url);
+                    //Generate random bytes according to challenge length
+                    Random random = new Random();
+                    byte[] randomBytes = new byte[challenge.Length];
+                    random.NextBytes(randomBytes);
+
+                    //Encode the byte generated to base64
+                    challenge = Convert.ToBase64String(randomBytes);
+
+                    //recreate the URL path
+                    urlPath = $"{urlPathandParameter[0]}?challenge={challenge}";
+
+                    //create a URI object with the new urlpath
+                    
+                    var url = new Uri(TargetUri, urlPath); //http://127.0.0.1:5000/authenticate/authenticate.cgi?challenge={challenge}
+
+                    //The response will be a JSON payload containing three fields. Nonce, AssetID and certificate
+                    var response = await Client.GetAsync(url);
+                    if(response.IsSuccessStatusCode && response.Content.Headers.ContentType.MediaType == "application/json")
+                    {
+                        var responseValue = await response.Content.ReadAsStringAsync();
+                    
+                        //verify
+                        IsValid = verifyBinding(item, responseValue, randomBytes);
+
+                    }
+                }
+                //var url = new Uri(TargetUri, item?.FormData.Href);
+                //if (item?.FormData.Htv_headers.Htv_fieldName == "challenge")
+                //    strinfieldValue = item?.FormData.Htv_headers.Htv_fieldValue;
+
+                //var response = await Client.GetAsync(url);
+
+                return IsValid;
             }
             catch (Exception ex)
             {
-
+                return IsValid;
             }
-            return true;
+            
         }
     }
 }

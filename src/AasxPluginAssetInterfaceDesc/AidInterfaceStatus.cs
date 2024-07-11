@@ -267,6 +267,11 @@ namespace AasxPluginAssetInterfaceDescription
             LogLine = line;
         }
 
+        public void SetBindingLine(StoredPrint.Color color, string line)
+        {
+            BindingColor = color;
+            BindingService = line;
+        }
         /// <summary>
         /// Computes a technology specific key and adds item.
         /// </summary>
@@ -513,6 +518,67 @@ namespace AasxPluginAssetInterfaceDescription
 
                 }
         }
+
+
+        ///<summary>
+        /// Will verify binding according to asset response payload
+        /// </summary>
+        public bool verifyBinding(AssetBindingService item, string responseValue, byte[] challenge)
+        {
+
+            if (item == null)
+                return false;
+            bool AssetIDValid = false;
+            bool nonceValíd = false;
+            try
+            {
+                if (item.MapOutputItems != null)
+                    foreach (var moi in item.MapOutputItems)
+                    {
+                        if (moi?.MapRelation?.Second != null && (moi.MapRelation.SecondHint is Aas.SubmodelElementCollection coll))
+                        {
+                            //responsePayload is serialized json string so it needs to be deserialized into json object. 
+                            JObject payloadJObject;
+
+                            using (var tdStringReader = new StringReader(responseValue))
+                            using (var jsonTextReader = new JsonTextReader(tdStringReader)
+                            { DateParseHandling = DateParseHandling.None })
+                            {
+                                payloadJObject = JObject.FromObject(JToken.ReadFrom(jsonTextReader));
+                            }
+                            foreach (var bindingProperty in coll.Value)
+                            {
+                                if ((bindingProperty is Aas.Property _bindingProperty) && (payloadJObject.ContainsKey(bindingProperty.IdShort)))
+                                {
+                                    if ((_bindingProperty.IdShort == "assetid") && (_bindingProperty.Value == payloadJObject["assetid"].ToString()))
+                                    {
+                                        AssetIDValid = true;
+                                    
+                                    }
+                                    else if ((_bindingProperty.IdShort == "nonce") && (Convert.FromBase64String(payloadJObject["nonce"].ToString()).Length == 8))
+                                    {
+                                        nonceValíd = true;
+                                        //openssl code
+                                        var nonceValue = Convert.FromBase64String(payloadJObject["nonce"].ToString());
+                                    }
+                                    else
+                                        throw new InvalidDataException(" AssetID or nonce does not match...");
+                                }
+                            }
+                        }
+                    }
+                return true;
+            }
+            catch (InvalidDataException)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+           
+        }
     }
 
     public class AidGenericConnections<T> : Dictionary<Uri, T> where T : AidBaseConnection, new()
@@ -716,7 +782,8 @@ namespace AasxPluginAssetInterfaceDescription
                         foreach (var item in ifc.AssetBinding.Values)
                             //use mostSignificant byte here
                             BindingFlag = await ifc.Connection.ExecuteBindingAsync(item);
-                            
+                        if (BindingFlag)
+                            ifc.SetBindingLine(StoredPrint.Color.Blue, "Binding Service is successful");
                     }
                 }
 
@@ -730,6 +797,7 @@ namespace AasxPluginAssetInterfaceDescription
                     ifc.Connection.Close();
             }
         }
+
 
         /// <summary>
         /// Will connect to each target once, get values and will disconnect again.
