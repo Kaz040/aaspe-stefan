@@ -567,7 +567,8 @@ namespace AasxPluginAssetInterfaceDescription
                             }
                         }
                     }
-                return true;
+
+                return (AssetIDValid && nonceValíd);
             }
             catch (InvalidDataException)
             {

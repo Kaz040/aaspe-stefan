@@ -356,11 +356,11 @@ namespace AasxPluginAssetInterfaceDescription
                              return new AnyUiLambdaActionNone();
                          }
 
-                         if (_allInterfaceStatus?.BindingFlag == true)
-                         {
-                             _log.Info(StoredPrint.Color.Blue, "Binding has already been established.....");
-                             return new AnyUiLambdaActionNone();
-                         }
+                         //if (_allInterfaceStatus?.BindingFlag == true)
+                         //{
+                         //    _log.Info(StoredPrint.Color.Blue, "Binding has already been established.....");
+                         //    return new AnyUiLambdaActionNone();
+                         //}
 
 
                          // Create Bindings
